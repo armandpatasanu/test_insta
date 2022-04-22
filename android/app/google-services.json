@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "265312787795",
+    "project_id": "instav2-e09ab",
+    "storage_bucket": "instav2-e09ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265312787795:android:6fb1c822c24e069bf4d5a6",
+        "android_client_info": {
+          "package_name": "com.armand.testproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265312787795-06agbv44sjcadgajrbo6k5qn8p1du2dq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOwfJq_C3-bojxGLMPJbthZRmKAtv96Z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265312787795-06agbv44sjcadgajrbo6k5qn8p1du2dq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
