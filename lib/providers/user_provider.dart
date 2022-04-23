@@ -5,10 +5,20 @@ import 'package:testproject/models/user.dart';
 import 'package:testproject/resources/auth_methods.dart';
 
 class UserProvider extends ChangeNotifier {
-  UserModel? _user;
+  UserModel _user = const UserModel(
+    username: '',
+    uid: '',
+    photoUrl: '',
+    email: '',
+    bio: '',
+    followers: [],
+    following: [],
+  );
   final AuthMethods _authMethods = AuthMethods();
 
-  UserModel getUser() => _user!;
+  UserModel getUser() {
+    return _user;
+  }
 
   Future<void> refreshUser() async {
     UserModel user = await _authMethods.getUserDetails();

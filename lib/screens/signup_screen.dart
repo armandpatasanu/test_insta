@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,7 +8,7 @@ import 'package:testproject/responsive/responsive_layout_screen.dart';
 import 'package:testproject/responsive/web_screen_layout.dart';
 import 'package:testproject/screens/login_screen.dart';
 import 'package:testproject/utils/colors.dart';
-import 'package:testproject/utils/dimensions.dart';
+import 'package:testproject/utils/global_variables.dart';
 import 'package:testproject/utils/utils.dart';
 import 'package:testproject/widgets/text_field_input.dart';
 

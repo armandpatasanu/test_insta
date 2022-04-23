@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testproject/models/user.dart';
 import 'package:testproject/providers/user_provider.dart';
+import 'package:testproject/utils/colors.dart';
+import 'package:testproject/utils/global_variables.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -13,12 +16,89 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+  int _page = 0;
+  late PageController pageController; // for tabs animation
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
+  void navigationTapped(int page) {
+    //Animating Page
+    pageController.jumpToPage(page);
+  }
+
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserProvider>(context).getUser();
+    UserModel? user = Provider.of<UserProvider>(context).getUser();
     return Scaffold(
-        body: Center(
-      child: Text('This is ' + user.email),
-    ));
+      body: PageView(
+        children: homeScreenItems,
+        controller: pageController,
+        physics: NeverScrollableScrollPhysics(),
+        onPageChanged: onPageChanged,
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        backgroundColor: mobileBackgroundColor,
+        onTap: navigationTapped,
+        currentIndex: _page,
+        // currentIndex: _page,
+        // onTap: (index) => setState(() => _page = index),
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              color: (_page == 0) ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search,
+                color: (_page == 1) ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.add_circle,
+                color: (_page == 2) ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite,
+              color: (_page == 3) ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              color: (_page == 4) ? primaryColor : secondaryColor,
+            ),
+            label: '',
+            backgroundColor: primaryColor,
+          ),
+        ],
+      ),
+    );
   }
 }
