@@ -1,11 +1,20 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:testproject/screens/comments_screen.dart';
 import 'package:testproject/utils/colors.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
   final snap;
   PostCard({Key? key, required this.snap}) : super(key: key);
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +34,7 @@ class PostCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 16,
                   backgroundImage: NetworkImage(
-                    snap['profImage'],
+                    widget.snap['profImage'],
                   ),
                 ),
                 Expanded(
@@ -38,7 +47,7 @@ class PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          snap['username'],
+                          widget.snap['username'],
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -81,13 +90,33 @@ class PostCard extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.35,
-            width: double.infinity,
-            child: Image.network(
-              snap['postUrl'],
-              fit: BoxFit.cover,
-            ),
-          ),
+              height: MediaQuery.of(context).size.height * 0.35,
+              width: double.infinity,
+              child: FadeInImage.memoryNetwork(
+                  placeholder:
+                      Uint8List.fromList(utf8.encode('assets/transparent.png')),
+                  image: widget.snap['postUrl'],
+                  imageErrorBuilder: (context, error, stacktrace) {
+                    // Handle Error for the 1st time
+                    return FadeInImage.memoryNetwork(
+                      placeholder: Uint8List.fromList(
+                          utf8.encode('assets/transparent.png')),
+                      image: widget.snap['postUrl'],
+                      imageErrorBuilder: (context, error, stacktrace) {
+                        // Handle Error for the 2nd time
+                        return FadeInImage.memoryNetwork(
+                          fit: BoxFit.cover,
+                          placeholder: Uint8List.fromList(
+                              utf8.encode('assets/transparent.png')),
+                          image: widget.snap['postUrl'],
+                          imageErrorBuilder: (context, error, stacktrace) {
+                            // Handle Error for the 3rd time to return text
+                            return Center(child: Text('Image Not Available'));
+                          },
+                        );
+                      },
+                    );
+                  })),
           Row(
             children: [
               IconButton(
@@ -98,7 +127,13 @@ class PostCard extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CommentsScreen(
+                      snap: widget.snap,
+                    ),
+                  ),
+                ),
                 icon: const Icon(
                   Icons.comment_outlined,
                 ),
@@ -134,7 +169,7 @@ class PostCard extends StatelessWidget {
                       .subtitle2!
                       .copyWith(fontWeight: FontWeight.w800),
                   child: Text(
-                    '${snap['likes'].length} likes',
+                    '${widget.snap['likes'].length} likes',
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -148,13 +183,13 @@ class PostCard extends StatelessWidget {
                       style: const TextStyle(color: primaryColor),
                       children: [
                         TextSpan(
-                          text: snap['username'],
+                          text: widget.snap['username'],
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: snap['description'],
+                          text: widget.snap['description'],
                         ),
                       ],
                     ),
@@ -162,9 +197,9 @@ class PostCard extends StatelessWidget {
                 ),
                 InkWell(
                   child: Container(
-                    child: Text(
+                    child: const Text(
                       'View all comments',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         color: secondaryColor,
                       ),
@@ -176,7 +211,7 @@ class PostCard extends StatelessWidget {
                 Container(
                   child: Text(
                     DateFormat.yMMMd().format(
-                      snap['datePublished'].toDate(),
+                      widget.snap['datePublished'].toDate(),
                     ),
                     style: const TextStyle(
                       color: secondaryColor,
